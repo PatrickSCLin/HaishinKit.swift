@@ -297,23 +297,27 @@ final class VideoIOComponent: IOComponent {
         guard var buffer: CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
-        CVPixelBufferLockBaseAddress(buffer, .readOnly)
-        defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
-        let image: CIImage = effect(buffer)
-        if !effects.isEmpty {
-            #if os(macOS)
-                // green edge hack for OSX
-                buffer = CVPixelBuffer.create(image)!
-            #endif
-            context?.render(image, to: buffer)
-        }
+//        CVPixelBufferLockBaseAddress(buffer, .readOnly)
+//        defer { CVPixelBufferUnlockBaseAddress(buffer, .readOnly) }
+//        let image: CIImage = effect(buffer)
+//        if !effects.isEmpty {
+//            #if os(macOS)
+//                // green edge hack for OSX
+//                buffer = CVPixelBuffer.create(image)!
+//            #endif
+//            context?.render(image, to: buffer)
+//        }
         encoder.encodeImageBuffer(
             buffer,
             presentationTimeStamp: sampleBuffer.presentationTimeStamp,
             duration: sampleBuffer.duration
         )
-        drawable?.draw(image: image)
-        mixer?.recorder.appendSampleBuffer(sampleBuffer, mediaType: .video)
+//        drawable?.draw(image: image)
+//        mixer?.recorder.appendSampleBuffer(sampleBuffer, mediaType: .video)
+    }
+    
+    func getPixelBufferPool() -> CVPixelBufferPool? {
+        return encoder.getPixelBufferPool()
     }
 
     func effect(_ buffer: CVImageBuffer) -> CIImage {

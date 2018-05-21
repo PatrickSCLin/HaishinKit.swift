@@ -236,6 +236,15 @@ final class H264Encoder: NSObject {
             _session = newValue
         }
     }
+    
+    func getPixelBufferPool() -> CVPixelBufferPool? {
+        guard running && locked == 0 else { return nil }
+        var pixelBufferPool: CVPixelBufferPool?
+        if let session = self.session {
+            pixelBufferPool = VTCompressionSessionGetPixelBufferPool(session)
+        }
+        return pixelBufferPool
+    }
 
     func encodeImageBuffer(_ imageBuffer: CVImageBuffer, presentationTimeStamp: CMTime, duration: CMTime) {
         guard running && locked == 0 else {

@@ -100,6 +100,9 @@ extension AVMixer {
         audioIO.encoder.delegate = nil
         audioIO.encoder.stopRunning()
     }
+    final public func getPixelBufferPool() -> CVPixelBufferPool? {
+        return videoIO.getPixelBufferPool()
+    }
 }
 
 extension AVMixer {
