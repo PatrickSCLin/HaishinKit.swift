@@ -315,10 +315,6 @@ final class VideoIOComponent: IOComponent {
 //        drawable?.draw(image: image)
 //        mixer?.recorder.appendSampleBuffer(sampleBuffer, mediaType: .video)
     }
-    
-    func getPixelBufferPool() -> CVPixelBufferPool? {
-        return encoder.getPixelBufferPool()
-    }
 
     func effect(_ buffer: CVImageBuffer) -> CIImage {
         var image: CIImage = CIImage(cvPixelBuffer: buffer)

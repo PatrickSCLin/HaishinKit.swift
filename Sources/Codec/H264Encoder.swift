@@ -213,7 +213,7 @@ final class H264Encoder: NSObject {
                     height,
                     kCMVideoCodecType_H264,
                     nil,
-                    attributes as CFDictionary?,
+                    nil, //attributes as CFDictionary?,
                     nil,
                     callback,
                     Unmanaged.passUnretained(self).toOpaque(),
@@ -236,15 +236,6 @@ final class H264Encoder: NSObject {
             _session = newValue
         }
     }
-    
-    func getPixelBufferPool() -> CVPixelBufferPool? {
-        guard running && locked == 0 else { return nil }
-        var pixelBufferPool: CVPixelBufferPool?
-        if let session = self.session {
-            pixelBufferPool = VTCompressionSessionGetPixelBufferPool(session)
-        }
-        return pixelBufferPool
-    }
 
     func encodeImageBuffer(_ imageBuffer: CVImageBuffer, presentationTimeStamp: CMTime, duration: CMTime) {
         guard running && locked == 0 else {
@@ -259,16 +250,16 @@ final class H264Encoder: NSObject {
         var flags: VTEncodeInfoFlags = []
         VTCompressionSessionEncodeFrame(
             session,
-            muted ? lastImageBuffer ?? imageBuffer : imageBuffer,
+            imageBuffer, //muted ? lastImageBuffer ?? imageBuffer : imageBuffer,
             presentationTimeStamp,
             duration,
             nil,
             nil,
             &flags
         )
-        if !muted {
-            lastImageBuffer = imageBuffer
-        }
+//        if !muted {
+//            lastImageBuffer = imageBuffer
+//        }
     }
 
     private func setProperty(_ key: CFString, _ value: CFTypeRef?) {
